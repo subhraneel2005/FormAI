@@ -1,8 +1,16 @@
 import { router } from "./routes";
 
-const express = require("express")
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://your-frontend-domain.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 const port = 3000
