@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/routes/index.ts","./src/services/nlpservice.ts","./src/services/parsingservice.ts","./src/services/supabase.ts","./src/services/uploadservice.ts"],"version":"5.7.3"}
+{"root":["./src/index.ts","./src/db/prisma.ts","./src/routes/index.ts","./src/services/authmiddleware.ts","./src/services/nlpservice.ts","./src/services/parsingservice.ts","./src/services/supabase.ts","./src/services/uploadservice.ts","./src/services/auth/auth.ts","./src/types/user.ts"],"version":"5.7.3"}
