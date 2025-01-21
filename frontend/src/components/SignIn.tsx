@@ -44,8 +44,8 @@ export default function SignIn() {
       }
 
       router.push("/upload")
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err as string)
     } finally {
       setIsLoading(false)
     }
