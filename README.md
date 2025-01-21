@@ -1,5 +1,14 @@
 # <b>FormAI</b>
 
+## Live URL: https://form-ai-rosy.vercel.app/
+### Test Signin Credentials:
+ - username: test
+ - test@123
+### Demo Video: https://www.loom.com/share/8883609e648e47158b61e5ce44612409?sid=0a8d11dd-6caa-4dcc-a182-a03ce94ac3fa  
+
+### High-Level-Architechture
+![Untitled-2024-12-17-0026](https://github.com/user-attachments/assets/678160fe-7f5b-4f10-a53b-a52cc5a7a233)
+
 ## 🚀 Features
 
 - PDF file upload and storage
