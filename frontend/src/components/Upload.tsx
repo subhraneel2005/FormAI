@@ -64,8 +64,8 @@ export default function UploadForm() {
         router.push(`/form/${result.data.savedData.id}`)
       }, 500)
 
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error) {
+      setError(error as string)
       setUploadProgress(0)
     } finally {
       setIsLoading(false)

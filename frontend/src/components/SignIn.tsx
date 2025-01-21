@@ -102,7 +102,7 @@ export default function SignIn() {
         </CardContent>
         <CardFooter>
           <p className="text-center text-sm text-gray-600 w-full">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link 
               href="/signup" 
               className="font-medium text-primary hover:text-primary/90"

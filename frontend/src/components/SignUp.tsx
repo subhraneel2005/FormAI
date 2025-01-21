@@ -43,8 +43,8 @@ export default function SignUp() {
       }
 
       router.push("/")
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError(err as string)
     } finally {
       setIsLoading(false)
     }
