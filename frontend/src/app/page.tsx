@@ -1,10 +1,10 @@
-import SignUp from "@/components/SignUp";
+import SignIn from "@/components/SignIn";
 
 export default function Home() {
   return (
     <div>
       FormAI
-      <SignUp/>
+      <SignIn/>
     </div>
   );
 }

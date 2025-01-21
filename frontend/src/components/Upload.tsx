@@ -3,10 +3,15 @@
 import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { useDropzone } from "react-dropzone"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Progress } from "@/components/ui/progress"
+import { Upload, FileUp } from "lucide-react"
 
-export default function Upload() {
+export default function UploadForm() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -25,6 +30,9 @@ export default function Upload() {
 
   const uploadFile = async (file: File) => {
     setError("")
+    setIsLoading(true)
+    setUploadProgress(0)
+    
     const formData = new FormData()
     formData.append("file", file)
 
@@ -49,48 +57,69 @@ export default function Upload() {
       }
 
       const result = await response.json()
-      console.log(result);
+      setUploadProgress(100)
       
-      router.push(`/form/${result.data.savedData.id}`)
+      // Small delay to show completion before redirect
+      setTimeout(() => {
+        router.push(`/form/${result.data.savedData.id}`)
+      }, 500)
+
     } catch (error: any) {
       setError(error.message)
       setUploadProgress(0)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-center mb-6">Upload PDF</h2>
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-      <div
-        {...getRootProps()}
-        className={`p-10 border-2 border-dashed rounded-lg text-center ${
-          isDragActive ? "border-indigo-600 bg-indigo-50" : "border-gray-300"
-        }`}
-      >
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p className="text-lg">Drop the PDF file here</p>
-        ) : (
-          <p className="text-lg">Drag and drop a PDF file here, or click to select a file</p>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-center">Upload PDF</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
-        <p className="text-sm text-gray-500 mt-2">Maximum file size: 10MB</p>
-      </div>
-      {uploadProgress > 0 && (
-        <div className="mt-4">
-          <div className="bg-gray-200 rounded-full h-2.5">
-            <div 
-              className="bg-indigo-600 h-2.5 rounded-full" 
-              style={{ width: `${uploadProgress}%` }}
-            />
+        
+        <div 
+          {...getRootProps()} 
+          className={`
+            border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
+            transition-colors duration-200
+            ${isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300'}
+            ${isLoading ? 'pointer-events-none opacity-50' : 'hover:border-primary'}
+          `}
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center gap-2">
+            {isLoading ? (
+              <Upload className="h-10 w-10 animate-pulse" />
+            ) : (
+              <FileUp className="h-10 w-10" />
+            )}
+            {isDragActive ? (
+              <p className="text-lg font-medium">Drop the PDF file here</p>
+            ) : (
+              <p className="text-lg font-medium">
+                Drag and drop a PDF file here, or click to select
+              </p>
+            )}
+            <p className="text-sm text-gray-500">Maximum file size: 10MB</p>
           </div>
-          <p className="text-center mt-2">{uploadProgress}% uploaded</p>
         </div>
-      )}
-    </div>
+
+        {uploadProgress > 0 && (
+          <div className="mt-4 space-y-2">
+            <Progress value={uploadProgress} className="w-full" />
+            <p className="text-sm text-center text-gray-500">
+              {uploadProgress}% uploaded
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }
