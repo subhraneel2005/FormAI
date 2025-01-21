@@ -30,6 +30,9 @@ export default function SignUp() {
 
       const data = await response.json()
 
+      console.log(data);
+      
+
       if (!response.ok) {
         throw new Error(data.message || "Signup failed")
       }
@@ -108,7 +111,7 @@ export default function SignUp() {
 
         <p className="mt-2 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <Link href="/signin" className="font-medium text-indigo-600 hover:text-indigo-500">
             Sign in
           </Link>
         </p>
