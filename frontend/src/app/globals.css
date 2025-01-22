@@ -3,7 +3,28 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Degular', sans-serif;
+}
+
+@font-face {
+  font-family: 'Degular';
+  src: url('/fonts/Degular-Black.otf') format('opentype');
+  font-weight: 900; /* Black */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Degular';
+  src: url('/fonts/Degular-Bold.otf') format('opentype');
+  font-weight: 800; /* Bold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Degular';
+  src: url('/fonts/Degular-Medium.otf') format('opentype');
+  font-weight: 500; /* Medium */
+  font-style: normal;
 }
 
 @layer base {
