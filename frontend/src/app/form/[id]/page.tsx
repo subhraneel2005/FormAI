@@ -22,6 +22,7 @@ interface Field {
   label: string
   value: string
   url?: string
+  link?: string  // Add this for single link format
   links?: Link[]
 }
 
@@ -91,25 +92,41 @@ export default function Form() {
           onChange={(e) => handleInputChange(index, e.target.value)}
         />
         
-        {/* Render single URL if present */}
-        {field.url && (
-          <div className="flex items-center gap-2 mt-1">
-            <ExternalLink className="h-4 w-4 text-gray-500" />
-            <Link 
-              href={field.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              {field.url}
-            </Link>
-          </div>
-        )}
-        
-        {/* Render multiple links if present */}
-        {field.links && field.links.length > 0 && (
+        {/* Handle all link formats */}
+        {(field.url || field.link || field.links) && (
           <div className="flex flex-col gap-1 mt-1">
-            {field.links.map((link, linkIndex) => (
+            {/* Single URL */}
+            {field.url && (
+              <div className="flex items-center gap-2">
+                <ExternalLink className="h-4 w-4 text-gray-500" />
+                <Link 
+                  href={field.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  {field.value}
+                </Link>
+              </div>
+            )}
+            
+            {/* Single link property */}
+            {field.link && (
+              <div className="flex items-center gap-2">
+                <ExternalLink className="h-4 w-4 text-gray-500" />
+                <Link 
+                  href={field.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  {field.value}
+                </Link>
+              </div>
+            )}
+            
+            {/* Multiple links array */}
+            {field.links?.map((link, linkIndex) => (
               <div key={linkIndex} className="flex items-center gap-2">
                 <ExternalLink className="h-4 w-4 text-gray-500" />
                 <Link 
