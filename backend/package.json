@@ -26,6 +26,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.9",
     "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.10.38",
     "prisma": "^6.2.1",
     "typescript": "^5.7.3",
     "zod": "^3.24.1"

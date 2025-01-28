@@ -1,7 +1,5 @@
 import {
   GoogleGenerativeAI,
-  HarmCategory,
-  HarmBlockThreshold,
 } from "@google/generative-ai";
 import dotenv from 'dotenv';
 dotenv.config();
@@ -28,7 +26,30 @@ export async function nlpService(text: string) {
         role: "user",
         parts: [
           {
-            text: `Extract form fields with labels and values in JSON format from this document: ${text}. Please output it in the following structure:\n\n{\n  "fields": [\n    {\n      "label": "Name",\n      "value": "John Doe"\n    },\n    {\n      "label": "Phone",\n      "value": "+1 (620) 130-7224"\n    }\n  ]\n}`,
+            text: `Extract form fields with labels and values in JSON format from this document: ${text}. For any URLs found in the text (formatted as [URL: url]), create a separate "link" field with appropriate labels. Please output it in the following structure:
+
+{
+  "fields": [
+    {
+      "label": "Name",
+      "value": "John Doe"
+    },
+    {
+      "label": "Phone",
+      "value": "+1 (620) 130-7224"
+    },
+    {
+      "label": "LinkedIn Profile",
+      "value": "John Doe",
+      "link": "https://linkedin.com/in/johndoe"
+    }
+  ]
+}
+
+When processing links:
+1. Create meaningful labels based on the context (e.g., "LinkedIn Profile", "Portfolio Website", "GitHub Profile")
+2. Include both the display text and the URL
+3. Group related information together (name with profile link, etc.)`,
           },
         ],
       },
@@ -36,7 +57,7 @@ export async function nlpService(text: string) {
         role: "model",
         parts: [
           {
-            text: "Output the extracted form fields in a structured JSON format with dynamic labels and values, similar to the example provided.",
+            text: "I'll extract the form fields and create structured JSON with appropriate labels for both regular fields and links, maintaining context and relationships between related information.",
           },
         ],
       },
@@ -48,7 +69,7 @@ export async function nlpService(text: string) {
 
   // Clean up and parse the returned JSON string
   const cleanedData = response.text().replace(/```json|```/g, '').trim();
-  const parsedData = JSON.parse(cleanedData); // Parse JSON string into an object
+  const parsedData = JSON.parse(cleanedData);
 
-  return parsedData; // Return the parsed JSON object
+  return parsedData;
 }
