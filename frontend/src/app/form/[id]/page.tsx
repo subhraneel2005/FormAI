@@ -20,9 +20,9 @@ interface Link {
 
 interface Field {
   label: string
-  value: string
+  value?: string
   url?: string
-  link?: string  // Add this for single link format
+  link?: string
   links?: Link[]
 }
 
@@ -83,14 +83,21 @@ export default function Form() {
   }
 
   const renderField = (field: Field, index: number) => {
+    // Check if this is a link-only field (no value needed)
+    const isLinkOnlyField = field.link && !field.value;
+
     return (
       <div key={index} className="grid w-full items-center gap-2 px-3">
         <Label className='font-semibold' htmlFor={`field-${index}`}>{field.label}</Label>
-        <Input 
-          id={`field-${index}`}
-          value={field.value}
-          onChange={(e) => handleInputChange(index, e.target.value)}
-        />
+        
+        {/* Only render Input if it's not a link-only field */}
+        {!isLinkOnlyField && (
+          <Input 
+            id={`field-${index}`}
+            value={field.value || ''}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+          />
+        )}
         
         {/* Handle all link formats */}
         {(field.url || field.link || field.links) && (
@@ -105,7 +112,7 @@ export default function Form() {
                   rel="noopener noreferrer"
                   className="text-sm text-blue-600 hover:text-blue-800"
                 >
-                  {field.value}
+                  {field.value || field.label}
                 </Link>
               </div>
             )}
@@ -120,7 +127,7 @@ export default function Form() {
                   rel="noopener noreferrer"
                   className="text-sm text-blue-600 hover:text-blue-800"
                 >
-                  {field.value}
+                  {field.value || field.label}
                 </Link>
               </div>
             )}
