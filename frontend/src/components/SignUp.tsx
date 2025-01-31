@@ -51,7 +51,9 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col space-y-4 items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <h1 className="font-bold text-5xl text-center">FormAI</h1>
+      <p className="text-muted-foreground text-lg mb-6 max-w-xl text-center">Transform PDFs into structured, actionable data using AI-powered text extraction and classification</p>
       <Card className="max-w-md w-full">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center font-bold">
@@ -114,7 +116,7 @@ export default function SignUp() {
           <p className="text-center text-sm text-gray-600 w-full">
             Already have an account?{" "}
             <Link 
-              href="/" 
+              href="/signin" 
               className="font-medium text-primary hover:text-primary/90"
             >
               Sign in
