@@ -27,7 +27,7 @@ export default function MoileNav() {
             <FiMenu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className=" bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-white/20">
           <SheetHeader className="mb-6">
             <SheetTitle className="font-bold text-2xl">FormAI</SheetTitle>
           </SheetHeader>

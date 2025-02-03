@@ -1,107 +1,181 @@
-'use client'
+"use client"
 
-import { motion, useInView } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { useRef } from "react"
-import { ArrowRight, Upload, Sparkles, Database } from "lucide-react"
+import { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { Play, XIcon } from "lucide-react"
 
-const steps = [
-  {
-    title: "Upload PDF",
-    description: "Simply drag and drop or click to upload your PDF document to our secure platform.",
-    icon: Upload,
-    color: "bg-blue-500"
+import { cn } from "@/lib/utils"
+
+/**
+ * HeroVideoDialog Component
+ * 
+ * @description A reusable video thumbnail and modal component with customizable animation
+ * @copyright Your Company Name
+ * @version 1.0.0
+ * @license All Rights Reserved
+ */
+
+type AnimationStyle =
+  | "from-bottom"
+  | "from-center"
+  | "from-top"
+  | "from-left"
+  | "from-right"
+  | "fade"
+  | "top-in-bottom-out"
+  | "left-in-right-out"
+
+interface HeroVideoProps {
+  animationStyle?: AnimationStyle
+  videoSrc: string
+  thumbnailSrc: string
+  thumbnailAlt?: string
+  className?: string
+}
+
+const animationVariants = {
+  "from-bottom": {
+    initial: { y: "100%", opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    exit: { y: "100%", opacity: 0 },
   },
-  {
-    title: "AI Processing",
-    description: "Our advanced AI analyzes the document structure and content in real-time.",
-    icon: Sparkles,
-    color: "bg-purple-500"
+  "from-center": {
+    initial: { scale: 0.5, opacity: 0 },
+    animate: { scale: 1, opacity: 1 },
+    exit: { scale: 0.5, opacity: 0 },
   },
-  {
-    title: "Get Results",
-    description: "Receive your structured data in JSON format, ready for integration.",
-    icon: Database,
-    color: "bg-green-500"
+  "from-top": {
+    initial: { y: "-100%", opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    exit: { y: "-100%", opacity: 0 },
+  },
+  "from-left": {
+    initial: { x: "-100%", opacity: 0 },
+    animate: { x: 0, opacity: 1 },
+    exit: { x: "-100%", opacity: 0 },
+  },
+  "from-right": {
+    initial: { x: "100%", opacity: 0 },
+    animate: { x: 0, opacity: 1 },
+    exit: { x: "100%", opacity: 0 },
+  },
+  fade: {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+  },
+  "top-in-bottom-out": {
+    initial: { y: "-100%", opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    exit: { y: "100%", opacity: 0 },
+  },
+  "left-in-right-out": {
+    initial: { x: "-100%", opacity: 0 },
+    animate: { x: 0, opacity: 1 },
+    exit: { x: "100%", opacity: 0 },
+  },
+}
+
+export default function HeroVideoDialog({
+  animationStyle = "from-center",
+  videoSrc ="https://youtu.be/hDcOhaKfhjE",
+  thumbnailSrc = '/thumbnail.png',
+  thumbnailAlt = "Video thumbnail",
+  className,
+}: HeroVideoProps) {
+  const [isVideoOpen, setIsVideoOpen] = useState(false)
+  const selectedAnimation = animationVariants[animationStyle]
+
+  const getEmbedUrl = (url: string) => {
+    if (!url) return ""
+    
+    // Handle different YouTube URL formats
+    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    const match = url.match(youtubeRegex)
+    
+    return match 
+      ? `https://www.youtube.com/embed/${match[1]}` 
+      : url
   }
-]
 
-export default function Workflow() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, {
-    once: true,
-    margin: "0px 0px -200px 0px"
-  })
+  const embedVideoSrc = getEmbedUrl(videoSrc)
 
   return (
-    <div className="min-h-screen gradient-section w-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 py-12 md:py-16 mt-[55px]">
-      {/* Heading and Bio */}
-      <div className="w-full max-w-4xl mb-8 md:mb-12">
-        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-4 lg:text-center">Workflow</h2>
-        <p className="text-base sm:text-lg text-foreground max-w-2xl mx-auto px-4 text-start">
-          Transform your PDF documents into structured data in three simple steps. 
-          Our intuitive workflow makes document processing effortless and efficient.
-        </p>
-      </div>
-
-      {/* Video Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="w-full max-w-4xl mb-8 md:mb-16 rounded-xl overflow-hidden shadow-2xl mx-4"
+    <div className={cn("relative max-w-4xl mx-auto mt-[40px] md:mt-[120px] py-10 px-4 md:px-2", className)}>
+      <h2 className="text-5xl lg:text-7xl font-bold mb-4 md:text-center">Workflow</h2>
+      <div
+        className="relative cursor-pointer group"
+        onClick={() => setIsVideoOpen(true)}
       >
-        <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
-          <iframe 
-            src="https://www.loom.com/embed/8883609e648e47158b61e5ce44612409?sid=bf07bad8-ee17-43ff-88aa-319c83a68fbf" 
-            frameBorder="0"
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-            allowFullScreen
-          />
-        </div>
-      </motion.div>
-
-      {/* Steps Section */}
-      <div ref={ref} className="w-full max-w-4xl px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="relative"
+        <img
+          src={thumbnailSrc}
+          alt={thumbnailAlt}
+          width={1920}
+          height={1080}
+          className="w-full h-auto transition-all duration-200 group-hover:brightness-[0.8] ease-out rounded-md shadow-lg border object-cover"
+        />
+        <div className="absolute inset-0 flex items-center justify-center group-hover:scale-100 scale-[0.9] transition-all duration-200 ease-out rounded-2xl">
+          <div className="bg-primary/10 flex items-center justify-center rounded-full backdrop-blur-md size-28">
+            <div
+              className={`flex items-center justify-center bg-gradient-to-b from-primary/30 to-primary shadow-md rounded-full size-20 transition-all ease-out duration-200 relative group-hover:scale-[1.2] scale-100`}
             >
-              <Card className="h-full">
-                <CardContent className="p-4 sm:p-6">
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    className="flex flex-col items-center text-center"
-                  >
-                    <div className={`p-3 sm:p-4 rounded-full ${step.color} mb-3 sm:mb-4`}>
-                      <step.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-semibold mb-2">{step.title}</h3>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">{step.description}</p>
-                  </motion.div>
-                </CardContent>
-              </Card>
-              
-              {/* Arrow connector for desktop */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                  <motion.div
-                    animate={{ x: [0, 15, 0] }}
-                    transition={{ duration: 1.2, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-6 h-6 text-gray-400" />
-                  </motion.div>
-                </div>
-              )}
-            </motion.div>
-          ))}
+              <Play
+                className="size-8 text-white fill-white group-hover:scale-105 scale-100 transition-transform duration-200 ease-out"
+                style={{
+                  filter:
+                    "drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06))",
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
+      <AnimatePresence>
+        {isVideoOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => setIsVideoOpen(false)}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md"
+          >
+            <motion.div
+              {...selectedAnimation}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="relative w-full max-w-3xl aspect-video mx-4 md:mx-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setIsVideoOpen(false)}
+                className="absolute -top-16 right-0 text-white text-xl bg-neutral-900/50 ring-1 backdrop-blur-md rounded-full p-2 dark:bg-neutral-100/50 dark:text-black"
+              >
+                <XIcon className="size-5" />
+              </button>
+              <div className="size-full border-2 border-white rounded-2xl overflow-hidden isolate z-[1] relative">
+                <iframe
+                  src={embedVideoSrc}
+                  className="size-full rounded-2xl"
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                ></iframe>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export function HeroVideoDialogDemo() {
+  return (
+    <div className="relative">
+      <HeroVideoDialog
+        animationStyle="from-center"
+        videoSrc="https://youtu.be/hDcOhaKfhjE"
+        thumbnailSrc="/thumbnail.png"
+        thumbnailAlt="PDF to JSON Workflow"
+      />
     </div>
   )
 }

@@ -51,7 +51,7 @@ export default function FeaturesSection() {
     margin: "0px 0px -200px 0px" // Starts animation slightly before coming into full view
   })
   return (
-    <div className="min-h-screen gradient-section w-full flex flex-col justify-center items-center p-8">
+    <div className="min-h-screen gradient-section w-full flex flex-col justify-center items-center p-8 py-10">
       {/* Heading and Bio */}
       <div className="items-start mb-8">
         <h2 className="text-5xl lg:text-7xl font-bold mb-4 md:text-center">Features</h2>
